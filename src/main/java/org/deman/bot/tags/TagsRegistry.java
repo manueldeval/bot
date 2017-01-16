@@ -15,17 +15,17 @@ public class TagsRegistry {
     private Map<String, TagBuilder> tagBuilders = new HashMap<>();
 
     public TagsRegistry() {
-        this.tagBuilders.put("think", THINK);
-        this.tagBuilders.put("nop", NOP);
-        this.tagBuilders.put("srai", SRAI);
-        this.tagBuilders.put("li", LI);
-        this.tagBuilders.put("random", RANDOM);
-        this.tagBuilders.put("uppercase", UPPERCASE);
-        this.tagBuilders.put("lowercase", LOWERCASE);
-        this.tagBuilders.put("formal", FORMAL);
-        this.tagBuilders.put("set", SET);
-        this.tagBuilders.put("get", GET);
-        this.tagBuilders.put("template", TEMPLATE);
+        this.tagBuilders.put("think", THINK_BUILDER);
+        this.tagBuilders.put("nop", NOP_BUILDER);
+        this.tagBuilders.put("srai", SRAI_BUILDER);
+        this.tagBuilders.put("li", LI_BUILDER);
+        this.tagBuilders.put("random", RANDOM_BUILDER);
+        this.tagBuilders.put("uppercase", UPPERCASE_BUILDER);
+        this.tagBuilders.put("lowercase", LOWERCASE_BUILDER);
+        this.tagBuilders.put("formal", FORMAL_BUILDER);
+        this.tagBuilders.put("set", SET_BUILDER);
+        this.tagBuilders.put("get", GET_BUILDER);
+        this.tagBuilders.put("template", TEMPLATE_BUILDER);
     }
 
     public void register(String name, TagBuilder builder) {
@@ -37,7 +37,7 @@ public class TagsRegistry {
     }
 
     public Tag generate(String name, Map<String, String> attributes, List<Tag> tags) {
-        return this.tagBuilders.getOrDefault(name, NOP).build(name, attributes, tags);
+        return this.tagBuilders.getOrDefault(name, NOP_BUILDER).build(name, attributes, tags);
     }
 
 }

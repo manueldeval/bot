@@ -2,6 +2,7 @@ package org.deman.bot.decision;
 
 import org.deman.bot.rules.Category;
 
+import javax.swing.text.html.Option;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +12,11 @@ import java.util.Optional;
  * Created by deman on 15/01/17.
  */
 public class RootDecisionTreeNode extends DecisionTreeNode {
+
+    public Optional<Category> match(String s){
+        return match(tokenize(s).orElse(null));
+    }
+
     @Override
     public Optional<Category> match(Token token) {
         return matchChildrenNodes(token);

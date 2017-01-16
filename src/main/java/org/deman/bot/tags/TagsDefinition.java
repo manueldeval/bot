@@ -14,27 +14,30 @@ import java.util.Optional;
  */
 public class TagsDefinition {
 
-    public static TagBuilder<DefaultTag> NOP = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static final DefaultTag NOP_INSTANCE = new DefaultTag("nop",null,null){
         public Optional<String> generate(Context context) {
             return Optional.empty();
         }
     };
 
-    public static TagBuilder<DefaultTag> THINK = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> NOP_BUILDER = (name, attributes, tags) -> NOP_INSTANCE;
+
+    public static TagBuilder<DefaultTag> THINK_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             getChildrens().forEach(c -> c.generate(context));
             return Optional.empty();
         }
     };
 
-    public static TagBuilder<DefaultTag> SRAI = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> SRAI_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             Optional<String> value = concat(context, tags);
+            System.out.println("Content of srai: "+value.get());
             return context.getEngine().evaluate(context, value.orElse(""));
         }
     };
 
-    public static TagBuilder<DefaultTag> SET = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> SET_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             Optional<String> value = concat(context, tags);
             String name = attributes.get("name");
@@ -43,26 +46,26 @@ public class TagsDefinition {
         }
     };
 
-    public static TagBuilder<DefaultTag> GET = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> GET_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             String name = attributes.get("name");
             return Optional.ofNullable(context.getState().getVars().get(name));
         }
     };
 
-    public static TagBuilder<DefaultTag> UPPERCASE = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> UPPERCASE_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             return concat(context, tags).map(String::toUpperCase);
         }
     };
 
-    public static TagBuilder<DefaultTag> LOWERCASE = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> LOWERCASE_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             return concat(context, tags).map(String::toLowerCase);
         }
     };
 
-    public static TagBuilder<DefaultTag> FORMAL = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> FORMAL_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             return concat(context, tags)
                     .map(String::toLowerCase)
@@ -70,19 +73,19 @@ public class TagsDefinition {
         }
     };
 
-    public static TagBuilder<DefaultTag> RANDOM = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> RANDOM_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             return tags.isEmpty()?Optional.empty():tags.get((int)(Math.random()*tags.size())).generate(context);
         }
     };
 
-    public static TagBuilder<DefaultTag> LI = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> LI_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             return concat(context, tags);
         }
     };
 
-    public static TagBuilder<DefaultTag> TEMPLATE = (name,attributes,tags) -> new DefaultTag(name,attributes,tags){
+    public static TagBuilder<DefaultTag> TEMPLATE_BUILDER = (name, attributes, tags) -> new DefaultTag(name,attributes,tags){
         public Optional<String> generate(Context context) {
             return concat(context, tags);
         }

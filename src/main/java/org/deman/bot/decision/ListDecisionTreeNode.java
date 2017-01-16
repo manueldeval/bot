@@ -27,7 +27,7 @@ public class ListDecisionTreeNode extends DecisionTreeNode {
 
     @Override
     public String toString() {
-        return "<SET>"+nameOfSet+"</SET>";
+        return "<SET_BUILDER>"+nameOfSet+"</SET_BUILDER>";
     }
 
 }

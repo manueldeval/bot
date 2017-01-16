@@ -43,18 +43,18 @@ public abstract class DecisionTreeNode {
     public abstract Optional<Category> match(Token token);
 
     protected Optional<Category> matchChildrenNodes(Token next) {
-        return createEligibleStream(next.getValue())
+        return createEligibleStream(next)
                 .map(node -> node.match(next))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst();
     }
 
-    protected Stream<DecisionTreeNode> createEligibleStream(String token) {
+    protected Stream<DecisionTreeNode> createEligibleStream(Token token) {
         return Stream.of(
                 Stream.of(h0Node, h1Node),
                 listNodes.stream(),
-                Stream.of(nodes.get(token)),
+                Stream.of(nodes.get(token == null?null:token.getValue())),
                 Stream.of(l0Node, l1Node)
         ).flatMap(Function.identity())
                 .filter(Objects::nonNull);

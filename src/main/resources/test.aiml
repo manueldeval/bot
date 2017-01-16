@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+    <category>
+        <pattern>HELLO WORLD</pattern>
+        <template>Bonjour monde.</template>
+    </category>
+
+    <topic name="hidden">
+    <category>
+        <pattern>BONJOUR</pattern>
+        <template><srai>HELLO WORLD</srai></template>
+    </category>
+    </topic>
+
+    <category>
+        <pattern>*</pattern>
+        <template>J'AI RIEN COMPRIS!</template>
+    </category>
+
+</aiml>

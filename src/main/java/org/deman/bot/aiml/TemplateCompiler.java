@@ -1,7 +1,6 @@
 package org.deman.bot.aiml;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
-import org.deman.bot.engine.Context;
 import org.deman.bot.rules.Category;
 import org.deman.bot.tags.Tag;
 import org.deman.bot.tags.TagsDefinition;
@@ -16,8 +15,12 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.deman.bot.tags.TagsDefinition.NOP_INSTANCE;
 
 /**
  * Created by deman on 15/01/17.
@@ -40,8 +43,9 @@ public class TemplateCompiler {
             throw new AimlParserException(e);
         }
         Document node = parser.getDocument();
-        return processNode(node, tagsRegistry)
-                .orElse(TagsDefinition.NOP.build("nop", null, null));
+        return DomHelper.findFirstNodeWithName(node,"template")
+                .flatMap(template -> processNode(template, tagsRegistry))
+                .orElse(NOP_INSTANCE);
     }
 
     private static Optional<Tag> processNode(Node node, TagsRegistry tagsRegistry) {
@@ -49,9 +53,8 @@ public class TemplateCompiler {
         // Get Instance of tagbuilder
         if (tagsRegistry.exists(name)) {
             Map<String, String> attributes = DomHelper.getAttributes(node);
-            List<Node> childrens = DomHelper.childrens(node);
-            List<Tag> tags = childrens.stream()
-                    .map(childNode -> processNode(node, tagsRegistry))
+            List<Tag> tags = DomHelper.childrens(node).stream()
+                    .map(childNode -> processNode(childNode, tagsRegistry))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toList());
