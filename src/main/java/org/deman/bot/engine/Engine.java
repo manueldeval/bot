@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static org.deman.bot.tags.TagsDefinition.NOP_INSTANCE;
 
@@ -45,6 +46,25 @@ public class Engine {
         // AddAll
         categories.addAll(newCategories);
         //logger.debug(decisionTree.toJson());
+    }
+
+    public Optional<String> onNewUserInput(Context context, String userInput) {
+        return Stream.of(userInput.replace(","," ").split("[\\.\\?!]"))
+                .filter(sentence -> !"".equals(sentence))
+                .map(sentence -> onNewSentence(context, sentence))
+                .reduce(Optional.empty(),this::mergeSentences);
+    }
+
+    protected Optional<String> mergeSentences(Optional<String> o1, Optional<String> o2) {
+        if (!o1.isPresent() && !o2.isPresent()){
+            return Optional.empty();
+        } else if (o1.isPresent() && !o2.isPresent()){
+            return o1;
+        } else if (!o1.isPresent() && o2.isPresent()){
+            return o2;
+        } else {
+            return Optional.of(o1.get()+" "+o2.get());
+        }
     }
 
     public Optional<String> onNewSentence(Context context, String sentence) {

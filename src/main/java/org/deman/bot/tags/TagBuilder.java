@@ -13,6 +13,6 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface TagBuilder<T extends Tag> {
 
-    T build(String name,Map<String,String> attributes,List<Tag> tags);
+    T build(Map<String,String> attributes,List<Tag> tags);
 
 }

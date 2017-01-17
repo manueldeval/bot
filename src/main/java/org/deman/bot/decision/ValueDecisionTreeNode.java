@@ -20,7 +20,7 @@ public class ValueDecisionTreeNode extends DecisionTreeNode {
     }
 
     public Optional<Category> match(Token tokens) {
-        if (tokens != null && value.equals(tokens.getValue())) {
+        if (tokens != null && value.equalsIgnoreCase(tokens.getValue())) {
             if (getCategory() != null) {
                 return Optional.of(getCategory());
             } else {

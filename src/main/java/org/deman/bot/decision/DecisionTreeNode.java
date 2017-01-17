@@ -54,7 +54,7 @@ public abstract class DecisionTreeNode {
         return Stream.of(
                 Stream.of(h0Node, h1Node),
                 listNodes.stream(),
-                Stream.of(nodes.get(token == null?null:token.getValue())),
+                Stream.of(nodes.get(token == null?null:token.getValue().toUpperCase())),
                 Stream.of(l0Node, l1Node)
         ).flatMap(Function.identity())
                 .filter(Objects::nonNull);
@@ -89,11 +89,9 @@ public abstract class DecisionTreeNode {
 
     private DecisionTreeNode getOrCreateValueNode(String value) {
         DecisionTreeNode child;
-        child = nodes.get(value);
-        if (nodes.get(value) == null) {
-            child = new ValueDecisionTreeNode(value);
-            nodes.put(value, child);
-        }
+        child = nodes.computeIfAbsent(
+                value.toUpperCase(),
+                k -> new ValueDecisionTreeNode(k.toUpperCase()));
         return child;
     }
 

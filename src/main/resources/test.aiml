@@ -7,10 +7,10 @@
     </category>
 
     <topic name="hidden">
-    <category>
-        <pattern>BONJOUR</pattern>
-        <template><srai>HELLO WORLD</srai></template>
-    </category>
+        <category>
+            <pattern>BONJOUR</pattern>
+            <template><srai>HELLO WORLD</srai></template>
+        </category>
     </topic>
 
     <category>
@@ -18,4 +18,13 @@
         <template>J'AI RIEN COMPRIS!</template>
     </category>
 
+    <!-- SRAI -->
+    <category><pattern>SRAI</pattern><template>srai</template></category>
+    <category><pattern>SRAI1</pattern><template>1<srai>SRAI</srai>1</template></category>
+    <category><pattern>SRAI2</pattern><template>2<srai>SRAI1</srai>2</template></category>
+
+    <!-- Match -->
+    <category><pattern>match * est mon nom</pattern><template>Hallo <star/></template></category>
+
 </aiml>
+

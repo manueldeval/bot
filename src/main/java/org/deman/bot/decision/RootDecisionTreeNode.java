@@ -2,7 +2,6 @@ package org.deman.bot.decision;
 
 import org.deman.bot.rules.Category;
 
-import javax.swing.text.html.Option;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +33,7 @@ public class RootDecisionTreeNode extends DecisionTreeNode {
         List<String> reverseSplitted = Arrays.asList(s.split("\\s+"));
         Collections.reverse(reverseSplitted);
         return reverseSplitted.stream()
+                .filter(word -> !"".equals(word)) // Trim
                 .map(Token::new).reduce((t1, t2) -> {
                     t2.setNext(t1);
                     return t2;

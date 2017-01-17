@@ -37,7 +37,7 @@ public class TagsRegistry {
     }
 
     public Tag generate(String name, Map<String, String> attributes, List<Tag> tags) {
-        return this.tagBuilders.getOrDefault(name, NOP_BUILDER).build(name, attributes, tags);
+        return this.tagBuilders.getOrDefault(name, NOP_BUILDER).build(attributes, tags);
     }
 
 }
