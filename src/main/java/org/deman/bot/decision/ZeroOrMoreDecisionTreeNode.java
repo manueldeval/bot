@@ -3,7 +3,6 @@ package org.deman.bot.decision;
 import org.deman.bot.rules.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,12 +40,12 @@ public class ZeroOrMoreDecisionTreeNode extends DecisionTreeNode {
         if (tokens == null || !isTokenAllowed(tokens)) {
             return Optional.empty();
         }
-        Token next = tokens.getNext().orElse(null);
+        Token next = tokens.getNext();
         return match(next);
     }
 
     private Optional<Category> matchChildrenOnNext(Token tokens) {
-        Token next = tokens.getNext().orElse(null);
+        Token next = tokens.getNext();
         return matchChildrenNodes(next);
     }
 

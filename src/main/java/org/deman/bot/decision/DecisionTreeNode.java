@@ -80,8 +80,8 @@ public abstract class DecisionTreeNode {
         } else {
             child = getOrCreateValueNode(value);
         }
-        if (token.getNext().isPresent()) {
-            child.createChildrenNode(token.getNext().get(), category);
+        if (token.getNext() != null) {
+            child.createChildrenNode(token.getNext(), category);
         } else {
             this.category = category;
         }

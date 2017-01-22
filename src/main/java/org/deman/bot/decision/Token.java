@@ -23,8 +23,8 @@ public class Token {
         this.value = value;
     }
 
-    public Optional<Token> getNext() {
-        return Optional.ofNullable(next);
+    public Token getNext() {
+        return next;
     }
 
     public void setNext(Token next) {
@@ -33,6 +33,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return value + getNext().map(t -> " | " + t).orElse("");
+        return value + next==null?"":" | " + value;
     }
 }

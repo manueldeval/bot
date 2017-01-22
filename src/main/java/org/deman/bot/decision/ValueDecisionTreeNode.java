@@ -32,7 +32,7 @@ public class ValueDecisionTreeNode extends DecisionTreeNode {
                 result = Optional.of(getCategory());
             } else {
                 // Sinon il faut aller voir en profondeur.
-                Token next = tokens.getNext().orElse(null);
+                Token next = tokens.getNext();
                 result = matchChildrenNodes(next);
             }
         } else {

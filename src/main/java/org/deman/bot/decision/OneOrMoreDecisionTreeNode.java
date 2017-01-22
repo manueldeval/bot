@@ -38,7 +38,7 @@ public class OneOrMoreDecisionTreeNode  extends DecisionTreeNode {
     }
 
     private Optional<Category> matchNext(Token tokens) {
-        Token next = tokens.getNext().orElse(null);
+        Token next = tokens.getNext();
         // Sinon il faut aller voir en profondeur.
         if (isHighOrder) {
             Optional<Category> selfMatch = match(next);
