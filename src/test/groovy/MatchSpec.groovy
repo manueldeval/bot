@@ -13,7 +13,7 @@ class MatchSpec extends Specification {
         def context = new Context()
 
         when:
-        engine.loadAimlFile("src/main/resources/test.aiml")
+        engine.loadAimlFile("src/test/resources/match.aiml")
         def response = engine.onNewUserInput(context,"match Toto est mon nom?")
 
         then:

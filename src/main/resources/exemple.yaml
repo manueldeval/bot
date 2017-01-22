@@ -1,6 +1,0 @@
-- in: Mon nom est (*:name)
-  or:
-   - (*:name) est mon nom
-   - je m'appelle (*:name)
-  out:
-   - ton nom est {{name}}

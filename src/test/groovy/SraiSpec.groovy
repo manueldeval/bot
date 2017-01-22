@@ -16,7 +16,7 @@ class SraiSpec extends Specification {
         def context = new Context()
 
         when:
-        engine.loadAimlFile("src/main/resources/test.aiml")
+        engine.loadAimlFile("src/test/resources/srai.aiml")
         def response = engine.onNewUserInput(context,"SRAI2")
 
         then:

@@ -12,7 +12,7 @@ class AimlParserSpec extends Specification {
 
     def "Parse a real aiml file with no error does not throw any exception."() {
         when:
-        AimlParser.parse(new File("src/main/resources/humor_ed.aiml"), new TagsRegistry());
+        AimlParser.parse(new File("src/test/resources/humor_ed.aiml"), new TagsRegistry());
 
         then:
         notThrown AimlParserException
@@ -36,7 +36,7 @@ class AimlParserSpec extends Specification {
         def context = new Context()
 
         when:
-        engine.loadAimlFile("src/main/resources/test.aiml")
+        engine.loadAimlFile("src/test/resources/simple.aiml")
         def response = engine.onNewUserInput(context,"HELLO WORLD")
 
         then:
@@ -50,7 +50,7 @@ class AimlParserSpec extends Specification {
         def context = new Context()
 
         when:
-        engine.loadAimlFile("src/main/resources/test.aiml")
+        engine.loadAimlFile("src/test/resources/simple.aiml")
         def response = engine.onNewUserInput(context,"hello WORLD")
 
         then:
@@ -64,7 +64,7 @@ class AimlParserSpec extends Specification {
         def context = new Context()
 
         when:
-        engine.loadAimlFile("src/main/resources/test.aiml")
+        engine.loadAimlFile("src/test/resources/simple.aiml")
         def response = engine.onNewUserInput(context,"   HELLO  WORLD   ")
 
         then:
@@ -78,7 +78,7 @@ class AimlParserSpec extends Specification {
         def context = new Context()
 
         when:
-        engine.loadAimlFile("src/main/resources/test.aiml")
+        engine.loadAimlFile("src/test/resources/simple.aiml")
         def response = engine.onNewUserInput(context,"   qqqq  WORLD   ")
 
         then:
@@ -92,7 +92,7 @@ class AimlParserSpec extends Specification {
         def context = new Context()
 
         when:
-        engine.loadAimlFile("src/main/resources/test.aiml")
+        engine.loadAimlFile("src/test/resources/simple.aiml")
         def response = engine.onNewUserInput(context,"HELLO  WORLD. Hello world? Hoho!")
 
         then:

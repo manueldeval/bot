@@ -115,7 +115,7 @@ public abstract class DecisionTreeNode {
     private DecisionTreeNode getOrCreateL1Node() {
         DecisionTreeNode child;
         if (l1Node == null) {
-            l1Node = new OneOrMoreDecisionTreeNode();
+            l1Node = new OneOrMoreDecisionTreeNode(false);
         }
         child = l1Node;
         return child;
@@ -124,7 +124,7 @@ public abstract class DecisionTreeNode {
     private DecisionTreeNode getOrCreateL0Node() {
         DecisionTreeNode child;
         if (l0Node == null) {
-            l0Node = new ZeroOrMoreDecisionTreeNode();
+            l0Node = new ZeroOrMoreDecisionTreeNode(false);
         }
         child = l0Node;
         return child;
@@ -133,7 +133,7 @@ public abstract class DecisionTreeNode {
     private DecisionTreeNode getOrCreateH1Node() {
         DecisionTreeNode child;
         if (h1Node == null) {
-            h1Node = new OneOrMoreDecisionTreeNode();
+            h1Node = new OneOrMoreDecisionTreeNode(true);
         }
         child = h1Node;
         return child;
@@ -142,7 +142,7 @@ public abstract class DecisionTreeNode {
     private DecisionTreeNode getOrCreateH0Node() {
         DecisionTreeNode child;
         if (h0Node == null) {
-            h0Node = new ZeroOrMoreDecisionTreeNode();
+            h0Node = new ZeroOrMoreDecisionTreeNode(true);
         }
         child = h0Node;
         return child;

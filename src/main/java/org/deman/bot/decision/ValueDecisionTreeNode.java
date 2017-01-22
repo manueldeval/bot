@@ -1,6 +1,8 @@
 package org.deman.bot.decision;
 
 import org.deman.bot.rules.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.function.Function;
  */
 public class ValueDecisionTreeNode extends DecisionTreeNode {
 
+    private static final Logger logger = LoggerFactory.getLogger(ValueDecisionTreeNode.class);
+
     protected String value;
 
     public ValueDecisionTreeNode(String value) {
@@ -20,16 +24,30 @@ public class ValueDecisionTreeNode extends DecisionTreeNode {
     }
 
     public Optional<Category> match(Token tokens) {
-        if (tokens != null && value.equalsIgnoreCase(tokens.getValue())) {
-            if (getCategory() != null) {
-                return Optional.of(getCategory());
+        Optional<Category> result;
+
+        // Si le token existe et qu'il match...
+        if (isTokenMatching(tokens)) {
+            if (getCategory() != null) { // Si on a une categorie, c'est un match
+                result = Optional.of(getCategory());
             } else {
+                // Sinon il faut aller voir en profondeur.
                 Token next = tokens.getNext().orElse(null);
-                return matchChildrenNodes(next);
+                result = matchChildrenNodes(next);
             }
         } else {
-            return Optional.empty();
+            // Si le token est vide ou qu'il ne match pas... pas de match
+            result = Optional.empty();
         }
+
+        if (result.isPresent()){
+            logger.debug("Exact match: "+ (tokens==null?"null":tokens.getValue()));
+        }
+        return result;
+    }
+
+    private boolean isTokenMatching(Token tokens) {
+        return tokens != null && value.equalsIgnoreCase(tokens.getValue());
     }
 
     @Override

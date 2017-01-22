@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+    <category><pattern>L1 STRICT</pattern><template>L1 STRICT</template></category>
+    <category><pattern>L1 *</pattern><template>L1 WILDCARD</template></category>
+    <category><pattern>L1 * OTHER</pattern><template>L1 OTHER</template></category>
+
+    <category><pattern>H1 STRICT</pattern><template>H1 STRICT</template></category>
+    <category><pattern>H1 _</pattern><template>H1 WILDCARD</template></category>
+    <category><pattern>H1 _ OTHER</pattern><template>H1 OTHER</template></category>
+
+    <category><pattern>L0 STRICT</pattern><template>L0 STRICT</template></category>
+    <category><pattern>L0 ^</pattern><template>L0 WILDCARD</template></category>
+    <category><pattern>L0 ^ OTHER</pattern><template>L0 OTHER</template></category>
+
+    <category><pattern>H0 STRICT</pattern><template>H0 STRICT</template></category>
+    <category><pattern>H0 #</pattern><template>H0 WILDCARD</template></category>
+    <category><pattern>H0 # OTHER</pattern><template>H0 OTHER</template></category>
+</aiml>
+

@@ -1,6 +1,8 @@
 package org.deman.bot.decision;
 
 import org.deman.bot.rules.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,12 +14,15 @@ import java.util.Optional;
  */
 public class RootDecisionTreeNode extends DecisionTreeNode {
 
+    private static final Logger logger = LoggerFactory.getLogger(DecisionTreeNode.class);
+
     public Optional<Category> match(String s){
         return match(tokenize(s).orElse(null));
     }
 
     @Override
     public Optional<Category> match(Token token) {
+        logger.debug("Search category for: "+token);
         return matchChildrenNodes(token);
     }
 
