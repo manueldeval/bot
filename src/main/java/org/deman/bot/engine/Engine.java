@@ -3,7 +3,9 @@ package org.deman.bot.engine;
 import org.deman.bot.aiml.AimlParser;
 import org.deman.bot.aiml.AimlParserException;
 import org.deman.bot.aiml.TemplateCompiler;
+import org.deman.bot.decision.CategoryMatch;
 import org.deman.bot.decision.DecisionTreeNode;
+import org.deman.bot.decision.Match;
 import org.deman.bot.decision.RootDecisionTreeNode;
 import org.deman.bot.engine.Context;
 import org.deman.bot.rules.Category;
@@ -15,11 +17,9 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.deman.bot.tags.TagsDefinition.NOP_INSTANCE;
@@ -77,11 +77,23 @@ public class Engine {
 
     public Optional<String> evaluate(Context context, String sentence) {
         sentence = sentence + " <that> * <topic> * ";
-        Optional<Category> category = decisionTree.match(sentence);
+        Optional<CategoryMatch> categoryMatch = decisionTree.match(sentence);
         if (logger.isDebugEnabled()) {
-            logger.debug(sentence + " ==> " + category.map(Category::toString).orElse("no category found."));
+            logger.debug(sentence + " ==> " + categoryMatch
+                    .map(CategoryMatch::getCategory)
+                    .map(Category::toString)
+                    .orElse("no category found."));
+            logger.debug(sentence + " ==> " + categoryMatch
+                    .map(CategoryMatch::getMatches)
+                    .orElse(new LinkedList<>())
+                    .stream()
+                    .map(Match::toString)
+                    .collect(Collectors.joining(",")));
+
         }
-        return category.map(compile())
+        return categoryMatch
+                .map(CategoryMatch::getCategory)
+                .map(compile())
                 .flatMap(tag -> tag.generate(context));
     }
 

@@ -23,13 +23,12 @@ public class ValueDecisionTreeNode extends DecisionTreeNode {
         this.value = value;
     }
 
-    public Optional<Category> match(Token tokens) {
-        Optional<Category> result;
-
+    public Optional<CategoryMatch> match(Token tokens) {
+        Optional<CategoryMatch> result;
         // Si le token existe et qu'il match...
         if (isTokenMatching(tokens)) {
             if (getCategory() != null) { // Si on a une categorie, c'est un match
-                result = Optional.of(getCategory());
+                result = Optional.of(new CategoryMatch(getCategory()));
             } else {
                 // Sinon il faut aller voir en profondeur.
                 Token next = tokens.getNext();
@@ -40,10 +39,7 @@ public class ValueDecisionTreeNode extends DecisionTreeNode {
             result = Optional.empty();
         }
 
-        if (result.isPresent()){
-            logger.debug("Exact match: "+ (tokens==null?"null":tokens.getValue()));
-        }
-        return result;
+        return result.map(categoryMatch -> categoryMatch.pushMatch(Match.value(tokens.getValue())));
     }
 
     private boolean isTokenMatching(Token tokens) {
@@ -52,6 +48,6 @@ public class ValueDecisionTreeNode extends DecisionTreeNode {
 
     @Override
     public String toString() {
-        return value;
+        return value+(category==null?"":"@");
     }
 }

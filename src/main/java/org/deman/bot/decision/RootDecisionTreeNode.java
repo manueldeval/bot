@@ -14,14 +14,14 @@ import java.util.Optional;
  */
 public class RootDecisionTreeNode extends DecisionTreeNode {
 
-    private static final Logger logger = LoggerFactory.getLogger(DecisionTreeNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(RootDecisionTreeNode.class);
 
-    public Optional<Category> match(String s){
+    public Optional<CategoryMatch> match(String s){
         return match(tokenize(s).orElse(null));
     }
 
     @Override
-    public Optional<Category> match(Token token) {
+    public Optional<CategoryMatch> match(Token token) {
         logger.debug("Search category for: "+token);
         return matchChildrenNodes(token);
     }

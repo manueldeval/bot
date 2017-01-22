@@ -1,6 +1,5 @@
 package org.deman.bot.decision;
 
-import org.deman.bot.rules.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,54 +21,50 @@ public class ZeroOrMoreDecisionTreeNode extends DecisionTreeNode {
         this.isHighOrder = isHighOrder;
     }
 
-    public Optional<Category> match(Token tokens) {
-        Optional<Category> result;
+    public Optional<CategoryMatch> match(Token tokens) {
+        Optional<CategoryMatch> result;
         if (getCategory() != null) {
-            result = Optional.of(getCategory());
+            result = Optional.of(new CategoryMatch(getCategory()));
         } else {
             result = matchNext(tokens);
-        }
-
-        if (result.isPresent()) {
-            logger.debug(this.toString() + " matches: " + (tokens == null ? "null" : tokens.getValue()));
         }
         return result;
     }
 
-    private Optional<Category> selfMatchOnNext(Token tokens) {
+    private Optional<CategoryMatch> selfMatchOnNext(Token tokens) {
         if (tokens == null || !isTokenAllowed(tokens)) {
             return Optional.empty();
         }
         Token next = tokens.getNext();
-        return match(next);
+        return match(next).map(cMatch -> cMatch.pushMatch(Match.wildcard(tokens.getValue())));
     }
 
-    private Optional<Category> matchChildrenOnNext(Token tokens) {
+    private Optional<CategoryMatch> matchChildrenOnNext(Token tokens) {
         Token next = tokens.getNext();
-        return matchChildrenNodes(next);
+        return matchChildrenNodes(next).map(cMatch -> cMatch.pushMatch(Match.wildcard(tokens.getValue())));
     }
 
-    private Optional<Category> matchChildrenOnCurrent(Token tokens) {
-        return matchChildrenNodes(tokens);
+    private Optional<CategoryMatch> matchChildrenOnCurrent(Token tokens) {
+        return matchChildrenNodes(tokens).map(cMatch -> cMatch.pushMatch(Match.wildcard("")));
     }
 
-    private List<Function<Token, Optional<Category>>> highOrderSearch = Arrays.asList(
+    private List<Function<Token, Optional<CategoryMatch>>> highOrderSearch = Arrays.asList(
             this::selfMatchOnNext,
             this::matchChildrenOnCurrent,
             this::matchChildrenOnNext
     );
 
-    private List<Function<Token, Optional<Category>>> lowOrderSearch = Arrays.asList(
+    private List<Function<Token, Optional<CategoryMatch>>> lowOrderSearch = Arrays.asList(
             this::matchChildrenOnCurrent,
             this::matchChildrenOnNext,
             this::selfMatchOnNext
     );
 
-    private List<Function<Token, Optional<Category>>> getSearchFunctions() {
+    private List<Function<Token, Optional<CategoryMatch>>> getSearchFunctions() {
         return isHighOrder ? highOrderSearch : lowOrderSearch;
     }
 
-    private Optional<Category> matchNext(Token tokens) {
+    private Optional<CategoryMatch> matchNext(Token tokens) {
         return getSearchFunctions().stream()
                 .map(f -> f.apply(tokens))
                 .filter(Optional::isPresent)
@@ -85,7 +80,7 @@ public class ZeroOrMoreDecisionTreeNode extends DecisionTreeNode {
 
     @Override
     public String toString() {
-        return (isHighOrder ? "H" : "L") + "0+";
+        return (isHighOrder ? "H" : "L") + "0+"+(category==null?"":"@");
     }
 
 

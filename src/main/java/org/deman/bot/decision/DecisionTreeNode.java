@@ -40,9 +40,9 @@ public abstract class DecisionTreeNode {
         return category;
     }
 
-    public abstract Optional<Category> match(Token token);
+    public abstract Optional<CategoryMatch> match(Token token);
 
-    protected Optional<Category> matchChildrenNodes(Token next) {
+    protected Optional<CategoryMatch> matchChildrenNodes(Token next) {
         return createEligibleStream(next)
                 .map(node -> node.match(next))
                 .filter(Optional::isPresent)
@@ -83,7 +83,7 @@ public abstract class DecisionTreeNode {
         if (token.getNext() != null) {
             child.createChildrenNode(token.getNext(), category);
         } else {
-            this.category = category;
+            child.setCategory(category);
         }
     }
 

@@ -33,6 +33,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return value + next==null?"":" | " + value;
+        return value + (next==null?"":(" | " + next.toString()));
     }
 }

@@ -19,36 +19,33 @@ public class OneOrMoreDecisionTreeNode  extends DecisionTreeNode {
         this.isHighOrder = isHighOrder;
     }
 
-    public Optional<Category> match(Token tokens) {
-        Optional<Category> result;
+    public Optional<CategoryMatch> match(Token tokens) {
+        Optional<CategoryMatch> result;
         // Si le token existe et qu'il match...
         if (isTokenMatching(tokens)) {
             if (getCategory() != null) {
-                result = Optional.of(getCategory());
+                result = Optional.of(new CategoryMatch(getCategory()));
             } else {
                 result =matchNext(tokens);
             }
         } else {
             result = Optional.empty();
         }
-        if (result.isPresent()){
-            logger.debug(this.toString()+" matches: "+ (tokens==null?"null":tokens.getValue()));
-        }
-        return result;
+        return result.map(categoryMatch -> categoryMatch.pushMatch(Match.wildcard(tokens.getValue())));
     }
 
-    private Optional<Category> matchNext(Token tokens) {
+    private Optional<CategoryMatch> matchNext(Token tokens) {
         Token next = tokens.getNext();
         // Sinon il faut aller voir en profondeur.
         if (isHighOrder) {
-            Optional<Category> selfMatch = match(next);
+            Optional<CategoryMatch> selfMatch = match(next);
             if (selfMatch.isPresent()) {
                 return selfMatch;
             } else {
                 return matchChildrenNodes(next);
             }
         } else {
-            Optional<Category> childrenMatch = matchChildrenNodes(next);
+            Optional<CategoryMatch> childrenMatch = matchChildrenNodes(next);
             if (childrenMatch.isPresent()) {
                 return childrenMatch;
             } else {
@@ -66,7 +63,7 @@ public class OneOrMoreDecisionTreeNode  extends DecisionTreeNode {
 
     @Override
     public String toString() {
-        return (isHighOrder?"H":"L")+"1+";
+        return (isHighOrder?"H":"L")+"1+"+(category==null?"":"@");
     }
 
 }

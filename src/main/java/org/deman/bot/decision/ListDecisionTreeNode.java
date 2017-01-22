@@ -21,7 +21,7 @@ public class ListDecisionTreeNode extends DecisionTreeNode {
     }
 
     @Override
-    public Optional<Category> match(Token token) {
+    public Optional<CategoryMatch> match(Token token) {
         throw new NotImplementedException();
     }
 
