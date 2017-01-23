@@ -1,7 +1,5 @@
 package org.deman.bot.decision;
 
-import org.deman.bot.rules.Category;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Optional;
 
@@ -22,7 +20,7 @@ public class ListDecisionTreeNode extends DecisionTreeNode {
 
     @Override
     public Optional<CategoryMatch> match(Token token) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

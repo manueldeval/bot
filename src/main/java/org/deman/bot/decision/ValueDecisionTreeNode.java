@@ -1,14 +1,9 @@
 package org.deman.bot.decision;
 
-import org.deman.bot.rules.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Created by deman on 15/01/17.

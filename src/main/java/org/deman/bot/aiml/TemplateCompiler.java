@@ -1,9 +1,8 @@
 package org.deman.bot.aiml;
 
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import org.apache.xerces.parsers.DOMParser;
 import org.deman.bot.rules.Category;
 import org.deman.bot.tags.Tag;
-import org.deman.bot.tags.TagsDefinition;
 import org.deman.bot.tags.TagsRegistry;
 import org.deman.bot.tags.TextTag;
 import org.slf4j.Logger;

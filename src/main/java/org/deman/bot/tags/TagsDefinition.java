@@ -1,11 +1,8 @@
 package org.deman.bot.tags;
 
-import com.oracle.webservices.internal.api.databinding.Databinding;
 import org.apache.commons.lang3.text.WordUtils;
 import org.deman.bot.engine.Context;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
