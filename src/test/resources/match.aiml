@@ -6,7 +6,11 @@
         <template>J'AI RIEN COMPRIS!</template>
     </category>
 
-    <category><pattern>match * est mon nom</pattern><template>Hallo <star/></template></category>
+    <category><pattern>hallo *</pattern><template>Bonjour <star/></template></category>
+
+    <category><pattern>match * est mon nom</pattern><template><srai>Hallo <star/></srai></template></category>
+
+    <category><pattern>Toc toc *</pattern><template><sr/></template></category>
 
 </aiml>
 

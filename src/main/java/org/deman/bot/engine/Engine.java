@@ -30,7 +30,6 @@ import static org.deman.bot.tags.TagsDefinition.NOP_INSTANCE;
 public class Engine {
 
     private static final Logger logger = LoggerFactory.getLogger(Engine.class);
-    private List<Category> categories = new ArrayList<>();
     private RootDecisionTreeNode decisionTree = new RootDecisionTreeNode();
     private TagsRegistry tagsRegistry = new TagsRegistry();
 
@@ -44,26 +43,25 @@ public class Engine {
             decisionTree.addCategory(cat);
         }
         // AddAll
-        categories.addAll(newCategories);
         //logger.debug(decisionTree.toJson());
     }
 
     public Optional<String> onNewUserInput(Context context, String userInput) {
-        return Stream.of(userInput.replace(","," ").split("[\\.\\?!]"))
+        return Stream.of(userInput.replace(",", " ").split("[\\.\\?!]"))
                 .filter(sentence -> !"".equals(sentence))
                 .map(sentence -> onNewSentence(context, sentence))
-                .reduce(Optional.empty(),this::mergeSentences);
+                .reduce(Optional.empty(), this::mergeSentences);
     }
 
     protected Optional<String> mergeSentences(Optional<String> o1, Optional<String> o2) {
-        if (!o1.isPresent() && !o2.isPresent()){
+        if (!o1.isPresent() && !o2.isPresent()) {
             return Optional.empty();
-        } else if (o1.isPresent() && !o2.isPresent()){
+        } else if (o1.isPresent() && !o2.isPresent()) {
             return o1;
-        } else if (!o1.isPresent() && o2.isPresent()){
+        } else if (!o1.isPresent() && o2.isPresent()) {
             return o2;
         } else {
-            return Optional.of(o1.get()+" "+o2.get());
+            return Optional.of(o1.get() + " " + o2.get());
         }
     }
 
@@ -77,35 +75,28 @@ public class Engine {
 
     public Optional<String> evaluate(Context context, String sentence) {
         sentence = sentence + " <that> * <topic> * ";
-        Optional<CategoryMatch> categoryMatch = decisionTree.match(sentence);
+        Optional<CategoryMatch> optCategoryMatch = decisionTree.match(sentence);
         if (logger.isDebugEnabled()) {
-            logger.debug(sentence + " ==> " + categoryMatch
-                    .map(CategoryMatch::getCategory)
-                    .map(Category::toString)
-                    .orElse("no category found."));
-            logger.debug(sentence + " ==> " + categoryMatch
-                    .map(CategoryMatch::getMatches)
-                    .orElse(new LinkedList<>())
-                    .stream()
-                    .map(Match::toString)
-                    .collect(Collectors.joining(",")));
-
+            logger.debug("_____________________________________________");
+            logger.debug(sentence + "\n" + optCategoryMatch.toString());
         }
-        return categoryMatch
-                .map(CategoryMatch::getCategory)
-                .map(compile())
-                .flatMap(tag -> tag.generate(context));
+        return optCategoryMatch.map(catMatch -> generateResult(context, catMatch))
+                .orElse(Optional.empty());
     }
 
-    private Function<Category, Tag> compile() {
-        return cat -> {
-            try {
-                return TemplateCompiler.compile(cat, tagsRegistry);
-            } catch (AimlParserException e) {
-                logger.error(e.getMessage(), e);
-                return NOP_INSTANCE;
-            }
-        };
+    private Optional<String> generateResult(Context context, CategoryMatch catMatch) {
+        Category category = catMatch.getCategory();
+        context.getState().pushPatternStars(catMatch.getPatternStar());
+        Tag tag = NOP_INSTANCE;
+        try {
+            tag = TemplateCompiler.compile(category, tagsRegistry);
+        } catch (AimlParserException e) {
+            logger.error("Error during the compilation of " + category, e);
+        }
+        Optional<String> result = tag.generate(context);
+        context.getState().popPatternStars();
+        return result;
     }
+
 }
 

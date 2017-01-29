@@ -30,6 +30,10 @@ public class Match {
         return value;
     }
 
+    public void setValue(String value) {
+        this.value = value.trim();
+    }
+
     @Override
     public String toString() {
         return type.name()+"("+ value + ")";

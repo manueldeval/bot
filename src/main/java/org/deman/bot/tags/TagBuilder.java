@@ -11,8 +11,8 @@ import java.util.function.Supplier;
  * Created by deman on 11/01/17.
  */
 @FunctionalInterface
-public interface TagBuilder<T extends Tag> {
+public interface TagBuilder {
 
-    T build(Map<String,String> attributes,List<Tag> tags);
+    Tag build(Map<String,String> attributes,List<Tag> tags);
 
 }

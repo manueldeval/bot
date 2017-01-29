@@ -18,6 +18,7 @@ public class TagsRegistry {
         this.tagBuilders.put("think", THINK_BUILDER);
         this.tagBuilders.put("nop", NOP_BUILDER);
         this.tagBuilders.put("srai", SRAI_BUILDER);
+        this.tagBuilders.put("sraix", SRAI_BUILDER);
         this.tagBuilders.put("li", LI_BUILDER);
         this.tagBuilders.put("random", RANDOM_BUILDER);
         this.tagBuilders.put("uppercase", UPPERCASE_BUILDER);
@@ -26,6 +27,15 @@ public class TagsRegistry {
         this.tagBuilders.put("set", SET_BUILDER);
         this.tagBuilders.put("get", GET_BUILDER);
         this.tagBuilders.put("template", TEMPLATE_BUILDER);
+        this.tagBuilders.put("star", STAR_BUILDER);
+        this.tagBuilders.put("sr", SR_BUILDER);
+        this.tagBuilders.put("br", BR_BUILDER);
+        this.tagBuilders.put("bot",new BotTagBuilder());
+        this.tagBuilders.put("condition",CONDITION_BUILDER);
+        this.tagBuilders.put("explode",EXPLODE_BUILDER);
+        this.tagBuilders.put("first",FIRST_BUILDER);
+        this.tagBuilders.put("rest",REST_BUILDER);
+        this.tagBuilders.put("sentence",SENTENCE_BUILDER);
     }
 
     public void register(String name, TagBuilder builder) {

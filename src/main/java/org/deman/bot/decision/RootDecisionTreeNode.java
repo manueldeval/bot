@@ -23,7 +23,7 @@ public class RootDecisionTreeNode extends DecisionTreeNode {
     @Override
     public Optional<CategoryMatch> match(Token token) {
         logger.debug("Search category for: "+token);
-        return matchChildrenNodes(token);
+        return matchChildrenNodes(token).map(CategoryMatch::postInit);
     }
 
     public static final String THAT = " <that> ";
@@ -34,7 +34,7 @@ public class RootDecisionTreeNode extends DecisionTreeNode {
         tokenize(decisionLine).ifPresent(token -> this.createChildrenNode(token, category));
     }
 
-    public Optional<Token> tokenize(String s) {
+    private Optional<Token> tokenize(String s) {
         List<String> reverseSplitted = Arrays.asList(s.split("\\s+"));
         Collections.reverse(reverseSplitted);
         return reverseSplitted.stream()
