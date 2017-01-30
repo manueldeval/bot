@@ -9,29 +9,25 @@ public class State {
 
     private Map<String, String> vars = new HashMap<>();
 
-    private Stack<List<String>> patternStars = new Stack<>();
+    private StarStack patternStars =  new StarStack();
+    private StarStack topicStars =  new StarStack();
+    private StarStack thatStars =  new StarStack();
+
+    public StarStack getPatternStars() {
+        return patternStars;
+    }
+
+    public StarStack getTopicStars() {
+        return topicStars;
+    }
+
+    public StarStack getThatStars() {
+        return thatStars;
+    }
 
     public Map<String, String> getVars() {
         return vars;
     }
 
-    public Optional<String> getPatternStar(int index) {
-        if (index <= currentPatternStars().size() && index > 0) {
-            return Optional.of(currentPatternStars().get(index - 1));
-        } else {
-            return Optional.empty();
-        }
-    }
 
-    private List<String> currentPatternStars(){
-        return patternStars.peek();
-    }
-
-    public void pushPatternStars(List<String> stars){
-        patternStars.push(stars);
-    }
-
-    public void popPatternStars(){
-        patternStars.pop();
-    }
 }

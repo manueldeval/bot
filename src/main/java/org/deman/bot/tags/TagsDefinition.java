@@ -116,13 +116,45 @@ public class TagsDefinition {
                     return Optional.empty();
                 }
             }
-            return context.getState().getPatternStar(index);
+            return context.getState().getPatternStars().getStarAt(index);
+        }
+    };
+
+    public static TagBuilder THATSTAR_BUILDER = (attributes, tags) -> new DefaultTag("thatstar", attributes, tags) {
+        public Optional<String> generate(Context context) {
+            int index = 1;
+            String strIndex = attributes.get("index");
+            if (strIndex != null) {
+                try {
+                    index = Integer.parseInt(strIndex);
+                } catch (Exception e) {
+                    logger.error("Bad index attribute format for thatstar, must be an integer.", e);
+                    return Optional.empty();
+                }
+            }
+            return context.getState().getThatStars().getStarAt(index);
+        }
+    };
+
+    public static TagBuilder TOPICSTAR_BUILDER = (attributes, tags) -> new DefaultTag("topicstar", attributes, tags) {
+        public Optional<String> generate(Context context) {
+            int index = 1;
+            String strIndex = attributes.get("index");
+            if (strIndex != null) {
+                try {
+                    index = Integer.parseInt(strIndex);
+                } catch (Exception e) {
+                    logger.error("Bad index attribute format for topicstar, must be an integer.", e);
+                    return Optional.empty();
+                }
+            }
+            return context.getState().getTopicStars().getStarAt(index);
         }
     };
 
     public static TagBuilder SR_BUILDER = (attributes, tags) -> new DefaultTag("sr", attributes, tags) {
         public Optional<String> generate(Context context) {
-            return context.getEngine().evaluate(context, context.getState().getPatternStar(1).orElse(""));
+            return context.getEngine().evaluate(context, context.getState().getPatternStars().getStarAt(1).orElse(""));
         }
     };
 

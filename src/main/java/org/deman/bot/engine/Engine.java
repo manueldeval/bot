@@ -4,22 +4,15 @@ import org.deman.bot.aiml.AimlParser;
 import org.deman.bot.aiml.AimlParserException;
 import org.deman.bot.aiml.TemplateCompiler;
 import org.deman.bot.decision.CategoryMatch;
-import org.deman.bot.decision.DecisionTreeNode;
-import org.deman.bot.decision.Match;
 import org.deman.bot.decision.RootDecisionTreeNode;
-import org.deman.bot.engine.Context;
 import org.deman.bot.rules.Category;
 import org.deman.bot.tags.Tag;
 import org.deman.bot.tags.TagsRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.deman.bot.tags.TagsDefinition.NOP_INSTANCE;
@@ -86,15 +79,21 @@ public class Engine {
 
     private Optional<String> generateResult(Context context, CategoryMatch catMatch) {
         Category category = catMatch.getCategory();
-        context.getState().pushPatternStars(catMatch.getPatternStar());
+        context.getState().getPatternStars().pushStars(catMatch.getPatternStar());
+        context.getState().getThatStars().pushStars(catMatch.getThatStar());
+        context.getState().getTopicStars().pushStars(catMatch.getTopicStar());
+
         Tag tag = NOP_INSTANCE;
         try {
             tag = TemplateCompiler.compile(category, tagsRegistry);
         } catch (AimlParserException e) {
             logger.error("Error during the compilation of " + category, e);
         }
+
         Optional<String> result = tag.generate(context);
-        context.getState().popPatternStars();
+        context.getState().getPatternStars().popStars();
+        context.getState().getTopicStars().popStars();
+        context.getState().getThatStars().popStars();
         return result;
     }
 

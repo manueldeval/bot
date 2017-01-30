@@ -28,6 +28,8 @@ public class TagsRegistry {
         this.tagBuilders.put("get", GET_BUILDER);
         this.tagBuilders.put("template", TEMPLATE_BUILDER);
         this.tagBuilders.put("star", STAR_BUILDER);
+        this.tagBuilders.put("thatstar", THATSTAR_BUILDER);
+        this.tagBuilders.put("topicstar", TOPICSTAR_BUILDER);
         this.tagBuilders.put("sr", SR_BUILDER);
         this.tagBuilders.put("br", BR_BUILDER);
         this.tagBuilders.put("bot",new BotTagBuilder());
