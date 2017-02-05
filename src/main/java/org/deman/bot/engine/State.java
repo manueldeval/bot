@@ -12,6 +12,8 @@ public class State {
     private StarStack patternStars =  new StarStack();
     private StarStack topicStars =  new StarStack();
     private StarStack thatStars =  new StarStack();
+    private RequestResponseStack requestStack = new RequestResponseStack();
+    private RequestResponseStack responseStack = new RequestResponseStack();
 
     public StarStack getPatternStars() {
         return patternStars;
@@ -29,5 +31,11 @@ public class State {
         return vars;
     }
 
+    public RequestResponseStack getRequestStack() {
+        return requestStack;
+    }
 
+    public RequestResponseStack getResponseStack() {
+        return responseStack;
+    }
 }

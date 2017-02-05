@@ -23,7 +23,7 @@ public class AimlParser {
     public static final String UTF_8 = "UTF-8";
     public static final String AIML_TAG = "aiml";
     public static final String CATEGORY_TAG = "category";
-    public static final String TOPICS_TAG = "topics";
+    public static final String TOPICS_TAG = "topic";
     public static final String EMPTY = "";
     public static final String TOPIC_NAME_ATTR = "name";
     public static final String DEFAULT_TOPIC = "*";

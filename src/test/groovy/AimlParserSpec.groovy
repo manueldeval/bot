@@ -2,6 +2,7 @@ import org.deman.bot.aiml.AimlParser
 import org.deman.bot.aiml.AimlParserException
 import org.deman.bot.engine.Context
 import org.deman.bot.engine.Engine
+import org.deman.bot.engine.State
 import org.deman.bot.tags.TagsRegistry
 import spock.lang.Specification
 
@@ -21,10 +22,10 @@ class AimlParserSpec extends Specification {
     def "No database, empty response"() {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
 
         when:
-        def response = engine.onNewUserInput(context,"HELLO WORLD")
+        def response = engine.onNewUserInput(state,"HELLO WORLD")
 
         then:
         !response.isPresent()
@@ -33,11 +34,11 @@ class AimlParserSpec extends Specification {
     def "Simple match"() {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
 
         when:
         engine.loadAimlFile("src/test/resources/simple.aiml")
-        def response = engine.onNewUserInput(context,"HELLO WORLD")
+        def response = engine.onNewUserInput(state,"HELLO WORLD")
 
         then:
         response.isPresent()
@@ -47,11 +48,11 @@ class AimlParserSpec extends Specification {
     def "Simple match, case insensitive."() {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
 
         when:
         engine.loadAimlFile("src/test/resources/simple.aiml")
-        def response = engine.onNewUserInput(context,"hello WORLD")
+        def response = engine.onNewUserInput(state,"hello WORLD")
 
         then:
         response.isPresent()
@@ -61,11 +62,11 @@ class AimlParserSpec extends Specification {
     def "Simple match, extra spaces."() {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
 
         when:
         engine.loadAimlFile("src/test/resources/simple.aiml")
-        def response = engine.onNewUserInput(context,"   HELLO  WORLD   ")
+        def response = engine.onNewUserInput(state,"   HELLO  WORLD   ")
 
         then:
         response.isPresent()
@@ -75,11 +76,11 @@ class AimlParserSpec extends Specification {
     def "No strict match, * match!"() {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
 
         when:
         engine.loadAimlFile("src/test/resources/simple.aiml")
-        def response = engine.onNewUserInput(context,"   qqqq  WORLD   ")
+        def response = engine.onNewUserInput(state,"   qqqq  WORLD   ")
 
         then:
         response.isPresent()
@@ -89,11 +90,11 @@ class AimlParserSpec extends Specification {
     def "More that one sentences."() {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
 
         when:
         engine.loadAimlFile("src/test/resources/simple.aiml")
-        def response = engine.onNewUserInput(context,"HELLO  WORLD. Hello world? Hoho!")
+        def response = engine.onNewUserInput(state,"HELLO  WORLD. Hello world? Hoho!")
 
         then:
         response.isPresent()

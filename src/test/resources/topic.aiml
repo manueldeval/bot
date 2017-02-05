@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+    <category>
+        <pattern>toto</pattern>
+        <template><think><set name="topic">INSIDE</set></think>outside</template>
+    </category>
+
+    <topic name="INSIDE">
+        <category>
+            <pattern>toto</pattern>
+            <template>inside</template>
+        </category>
+    </topic>
+
+</aiml>
+

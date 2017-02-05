@@ -6,10 +6,11 @@ package org.deman.bot.engine;
  */
 public class Context {
     private Engine engine;
-    private State state = new State();
+    private State state;
 
-    public void setEngine(Engine engine) {
+    public Context(Engine engine, State state) {
         this.engine = engine;
+        this.state = state;
     }
 
     public Engine getEngine() {

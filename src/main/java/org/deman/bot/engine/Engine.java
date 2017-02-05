@@ -25,6 +25,7 @@ public class Engine {
     private static final Logger logger = LoggerFactory.getLogger(Engine.class);
     private RootDecisionTreeNode decisionTree = new RootDecisionTreeNode();
     private TagsRegistry tagsRegistry = new TagsRegistry();
+    private int maxHistory = 50;
 
     public void loadAimlFile(String filename) throws AimlParserException {
         TagsRegistry tagsRegistry = new TagsRegistry();
@@ -39,10 +40,10 @@ public class Engine {
         //logger.debug(decisionTree.toJson());
     }
 
-    public Optional<String> onNewUserInput(Context context, String userInput) {
+    public Optional<String> onNewUserInput(State state, String userInput) {
         return Stream.of(userInput.replace(",", " ").split("[\\.\\?!]"))
                 .filter(sentence -> !"".equals(sentence))
-                .map(sentence -> onNewSentence(context, sentence))
+                .map(sentence -> onNewSentence(state, sentence))
                 .reduce(Optional.empty(), this::mergeSentences);
     }
 
@@ -58,16 +59,26 @@ public class Engine {
         }
     }
 
-    public Optional<String> onNewSentence(Context context, String sentence) {
+    public Optional<String> onNewSentence(State state, String sentence) {
         // Setup context...
-        context.setEngine(this);
+        Context context = new Context(this,state);
+
+        context.getState().getRequestStack().push(sentence, maxHistory);
 
         // And go evaluation!
-        return evaluate(context, sentence);
+        Optional<String> optResult = evaluate(context, sentence);
+
+        context.getState().getResponseStack().push(optResult.orElse(""), maxHistory);
+        return optResult;
     }
 
     public Optional<String> evaluate(Context context, String sentence) {
-        sentence = sentence + " <that> * <topic> * ";
+
+        sentence = sentence + " <that> " +
+                context.getState().getResponseStack().current().orElse("*") +
+                " <topic> " +
+                context.getState().getVars().getOrDefault("topic","*");
+        System.out.println(">>>>>>>>"+sentence);
         Optional<CategoryMatch> optCategoryMatch = decisionTree.match(sentence);
         if (logger.isDebugEnabled()) {
             logger.debug("_____________________________________________");
@@ -79,6 +90,7 @@ public class Engine {
 
     private Optional<String> generateResult(Context context, CategoryMatch catMatch) {
         Category category = catMatch.getCategory();
+
         context.getState().getPatternStars().pushStars(catMatch.getPatternStar());
         context.getState().getThatStars().pushStars(catMatch.getThatStar());
         context.getState().getTopicStars().pushStars(catMatch.getTopicStar());
@@ -89,8 +101,8 @@ public class Engine {
         } catch (AimlParserException e) {
             logger.error("Error during the compilation of " + category, e);
         }
-
         Optional<String> result = tag.generate(context);
+
         context.getState().getPatternStars().popStars();
         context.getState().getTopicStars().popStars();
         context.getState().getThatStars().popStars();

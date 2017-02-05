@@ -1,5 +1,6 @@
 import org.deman.bot.engine.Context
 import org.deman.bot.engine.Engine
+import org.deman.bot.engine.State
 import spock.lang.Specification
 
 /**
@@ -10,11 +11,11 @@ class WildcardSpec extends Specification {
     def "L1"(String input,String output) {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
         engine.loadAimlFile("src/test/resources/wildcard.aiml")
 
         expect:
-        engine.onNewUserInput(context,input).get() == output
+        engine.onNewUserInput(state,input).get() == output
 
         where:
         input                   | output
@@ -26,11 +27,11 @@ class WildcardSpec extends Specification {
     def "H1"(String input,String output) {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
         engine.loadAimlFile("src/test/resources/wildcard.aiml")
 
         expect:
-        engine.onNewUserInput(context,input).get() == output
+        engine.onNewUserInput(state,input).get() == output
 
         where:
         input                   | output
@@ -42,11 +43,11 @@ class WildcardSpec extends Specification {
     def "L0"(String input,String output) {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
         engine.loadAimlFile("src/test/resources/wildcard.aiml")
 
         expect:
-        engine.onNewUserInput(context,input).get() == output
+        engine.onNewUserInput(state,input).get() == output
 
         where:
         input                   | output
@@ -60,12 +61,12 @@ class WildcardSpec extends Specification {
     def "H0"(String input,String output) {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
         engine.loadAimlFile("src/test/resources/wildcard.aiml")
 
         expect:
         println("== "+input+" ==")
-        engine.onNewUserInput(context,input).get() == output
+        engine.onNewUserInput(state,input).get() == output
 
         where:
         input                   | output

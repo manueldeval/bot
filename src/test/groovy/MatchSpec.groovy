@@ -1,5 +1,6 @@
 import org.deman.bot.engine.Context
 import org.deman.bot.engine.Engine
+import org.deman.bot.engine.State
 import org.paumard.streams.StreamsUtils
 import spock.lang.Specification
 
@@ -14,11 +15,11 @@ class MatchSpec extends Specification {
     def "Match"() {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
 
         when:
         engine.loadAimlFile("src/test/resources/match.aiml")
-        def response = engine.onNewUserInput(context,"match Toto est mon nom?")
+        def response = engine.onNewUserInput(state,"match Toto est mon nom?")
 
         then:
         response.isPresent()
@@ -28,11 +29,11 @@ class MatchSpec extends Specification {
     def "Match with sr"() {
         given:
         def engine = new Engine()
-        def context = new Context()
+        def state = new State()
 
         when:
         engine.loadAimlFile("src/test/resources/match.aiml")
-        def response = engine.onNewUserInput(context,"Toc toc match Toto est mon nom?")
+        def response = engine.onNewUserInput(state,"Toc toc match Toto est mon nom?")
 
         then:
         response.isPresent()
