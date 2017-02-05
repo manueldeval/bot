@@ -20,6 +20,15 @@ public class BotTagBuilder implements TagBuilder {
         propertiesProvider.put("default", DEFAULT::get);
     }
 
+
+    public void register(String mapName, Function<String, String> provider){
+        this.propertiesProvider.put(mapName,provider);
+    }
+
+    public void unRegister(String mapName, Function<String, String> provider){
+        this.propertiesProvider.remove(mapName);
+    }
+
     @Override
     public Tag build(Map<String, String> attributes, List<Tag> childrens) {
         return new DefaultTag("bot", attributes, childrens) {

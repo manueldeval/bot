@@ -14,6 +14,9 @@ public class TagsRegistry {
 
     private Map<String, TagBuilder> tagBuilders = new HashMap<>();
 
+    private BotTagBuilder botTagBuilder = new BotTagBuilder();
+    private MapTagBuilder mapTagBuilder = new MapTagBuilder();
+
     public TagsRegistry() {
         this.tagBuilders.put("think", THINK_BUILDER);
         this.tagBuilders.put("nop", NOP_BUILDER);
@@ -32,19 +35,31 @@ public class TagsRegistry {
         this.tagBuilders.put("topicstar", TOPICSTAR_BUILDER);
         this.tagBuilders.put("sr", SR_BUILDER);
         this.tagBuilders.put("br", BR_BUILDER);
-        this.tagBuilders.put("bot",new BotTagBuilder());
-        this.tagBuilders.put("condition",CONDITION_BUILDER);
-        this.tagBuilders.put("explode",EXPLODE_BUILDER);
-        this.tagBuilders.put("first",FIRST_BUILDER);
-        this.tagBuilders.put("rest",REST_BUILDER);
-        this.tagBuilders.put("sentence",SENTENCE_BUILDER);
+        this.tagBuilders.put("bot", botTagBuilder);
+        this.tagBuilders.put("condition", CONDITION_BUILDER);
+        this.tagBuilders.put("explode", EXPLODE_BUILDER);
+        this.tagBuilders.put("first", FIRST_BUILDER);
+        this.tagBuilders.put("rest", REST_BUILDER);
+        this.tagBuilders.put("sentence", SENTENCE_BUILDER);
+        this.tagBuilders.put("input", INPUT_BUILDER);
+        this.tagBuilders.put("request", REQUEST_BUILDER);
+        this.tagBuilders.put("response", RESPONSE_BUILDER);
+        this.tagBuilders.put("map", mapTagBuilder);
+    }
+
+    public BotTagBuilder getBotTagBuilder() {
+        return botTagBuilder;
+    }
+
+    public MapTagBuilder getMapTagBuilder() {
+        return mapTagBuilder;
     }
 
     public void register(String name, TagBuilder builder) {
         this.tagBuilders.put(name, builder);
     }
 
-    public boolean exists(String tagName){
+    public boolean exists(String tagName) {
         return this.tagBuilders.get(tagName) != null;
     }
 

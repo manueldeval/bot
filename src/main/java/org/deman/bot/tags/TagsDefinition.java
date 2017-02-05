@@ -205,6 +205,44 @@ public class TagsDefinition {
         }
     };
 
+    public static TagBuilder INPUT_BUILDER = (attributes, tags) -> new DefaultTag("input", attributes, tags) {
+        public Optional<String> generate(Context context) {
+            return context.getState().getRequestStack().current();
+        }
+    };
+
+    public static TagBuilder REQUEST_BUILDER = (attributes, tags) -> new DefaultTag("request", attributes, tags) {
+        public Optional<String> generate(Context context) {
+            int index = 0;
+            String strIndex = attributes.get("index");
+            if (strIndex != null) {
+                try {
+                    index = Integer.parseInt(strIndex);
+                } catch (Exception e) {
+                    logger.error("Bad index attribute format for request, must be an integer.", e);
+                    return Optional.empty();
+                }
+            }
+            return context.getState().getRequestStack().getAt(index);
+        }
+    };
+
+    public static TagBuilder RESPONSE_BUILDER = (attributes, tags) -> new DefaultTag("response", attributes, tags) {
+        public Optional<String> generate(Context context) {
+            int index = 0;
+            String strIndex = attributes.get("index");
+            if (strIndex != null) {
+                try {
+                    index = Integer.parseInt(strIndex);
+                } catch (Exception e) {
+                    logger.error("Bad index attribute format for request, must be an integer.", e);
+                    return Optional.empty();
+                }
+            }
+            return context.getState().getResponseStack().getAt(index);
+        }
+    };
+
     public static Optional<String> concat(Context context, List<Tag> tags) {
         return tags.stream()
                 .map(tag -> tag.generate(context))
