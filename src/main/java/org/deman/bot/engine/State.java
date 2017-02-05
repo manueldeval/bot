@@ -7,13 +7,21 @@ import java.util.*;
  */
 public class State {
 
+    private String userId = "Lord";
     private Map<String, String> vars = new HashMap<>();
-
     private StarStack patternStars =  new StarStack();
     private StarStack topicStars =  new StarStack();
     private StarStack thatStars =  new StarStack();
     private RequestResponseStack requestStack = new RequestResponseStack();
     private RequestResponseStack responseStack = new RequestResponseStack();
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
 
     public StarStack getPatternStars() {
         return patternStars;

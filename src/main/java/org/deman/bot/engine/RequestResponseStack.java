@@ -1,5 +1,7 @@
 package org.deman.bot.engine;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Optional;
 import java.util.Stack;
 
@@ -8,6 +10,7 @@ import java.util.Stack;
  */
 public class RequestResponseStack {
 
+    @JsonProperty
     private Stack<String> stack = new Stack<>();
 
     public Optional<String> getAt(int index) {

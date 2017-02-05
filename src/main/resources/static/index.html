@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Bootstrap, from Twitter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="webjars/bootstrap/2.3.2/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+
+
+
+
+    </style>
+    <link href="webjars/bootstrap/2.3.2/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+
+    <script src="webjars/axios/0.13.1/dist/axios.js"></script>
+    <script src="webjars/vue/2.1.3/vue.js"></script>
+
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="#">MyBot</a>
+            <!-- <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+<div class="container theme-showcase" role="main">
+    <h1>MyBot</h1>
+    <div class="container">
+
+        <form class="form-signin" id="sendForm">
+            <input type="text" class="input-block-level" placeholder="User input" id="sendText">
+            <button class="btn  btn-primary" type="submit" id="send">Send</button>
+            <button class="btn  btn-secondary" type="button" id="reset">Reset State</button>
+            <button class="btn  btn-secondary" type="button" id="reload">Reload rules</button>
+        </form>
+
+    </div>
+
+    <div id="dialog">
+
+
+    </div>
+</div> <!-- /container -->
+
+
+<script>
+
+    var state = null;
+    var sendFormElement = document.getElementById("sendForm");
+    var inputFormElement = document.getElementById("sendText");
+    var dialogDivElement = document.getElementById("dialog");
+    var resetButtonElement = document.getElementById("reset");
+    var reloadButtonElement = document.getElementById("reload");
+
+    reloadButtonElement.onclick = function(evt){
+        state = null;
+         dialogDivElement.innerHTML = "";
+        axios.get('/chat/reload', {})
+            .then(function (response) {
+                console.log("Done");
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    resetButtonElement.onclick = function(evt){
+        state = null;
+        dialogDivElement.innerHTML = "";
+    }
+
+    sendForm.onsubmit = function(evt){
+        evt.preventDefault();
+        var text = inputFormElement.value;
+        inputFormElement.value = "";
+        var jsonPost = {
+            state: state,
+            input: text
+        };
+
+        var d = document.createElement("div");
+        d.className = "alert alert-success";
+        d.innerHTML = "> "+text;
+
+        if (dialogDivElement.firstChild) {
+            dialogDivElement.insertBefore(d, dialogDivElement.firstChild)
+        } else {
+            dialogDivElement.appendChild(d);
+        }
+        axios.post('/chat/submit', jsonPost)
+            .then(function (response) {
+                state = response.data.state;
+                var d = document.createElement("div");
+                d.className = "alert alert-info";
+                d.innerHTML = "> "+response.data.output;
+                dialogDivElement.insertBefore(d, dialogDivElement.firstChild)
+                console.log("State",state);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    };
+
+</script>
+
+</body>
+</html>
+

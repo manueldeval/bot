@@ -1,0 +1,4 @@
+aimls: ./src/main/resources/french-aiml-publish/
+server.port: 3000
+logging.level.root: INFO
+logging.file: ./application.log

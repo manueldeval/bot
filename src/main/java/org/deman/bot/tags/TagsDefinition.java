@@ -227,6 +227,18 @@ public class TagsDefinition {
         }
     };
 
+    public static TagBuilder THAT_BUILDER = (attributes, tags) -> new DefaultTag("request", attributes, tags) {
+        public Optional<String> generate(Context context) {
+            return context.getState().getRequestStack().current();
+        }
+    };
+
+    public static TagBuilder ID_BUILDER = (attributes, tags) -> new DefaultTag("id", attributes, tags) {
+        public Optional<String> generate(Context context) {
+            return Optional.ofNullable(context.getState().getUserId());
+        }
+    };
+
     public static TagBuilder RESPONSE_BUILDER = (attributes, tags) -> new DefaultTag("response", attributes, tags) {
         public Optional<String> generate(Context context) {
             int index = 0;

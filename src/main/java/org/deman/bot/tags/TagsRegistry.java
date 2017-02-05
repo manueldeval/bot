@@ -45,6 +45,9 @@ public class TagsRegistry {
         this.tagBuilders.put("request", REQUEST_BUILDER);
         this.tagBuilders.put("response", RESPONSE_BUILDER);
         this.tagBuilders.put("map", mapTagBuilder);
+        this.tagBuilders.put("a",NOP_BUILDER);
+        this.tagBuilders.put("that",THAT_BUILDER);
+        this.tagBuilders.put("id",ID_BUILDER);
     }
 
     public BotTagBuilder getBotTagBuilder() {
@@ -60,11 +63,11 @@ public class TagsRegistry {
     }
 
     public boolean exists(String tagName) {
-        return this.tagBuilders.get(tagName) != null;
+        return this.tagBuilders.get(tagName.toLowerCase()) != null;
     }
 
     public Tag generate(String name, Map<String, String> attributes, List<Tag> tags) {
-        return this.tagBuilders.getOrDefault(name, NOP_BUILDER).build(attributes, tags);
+        return this.tagBuilders.getOrDefault(name.toLowerCase(), NOP_BUILDER).build(attributes, tags);
     }
 
 }

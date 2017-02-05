@@ -33,10 +33,18 @@ public class AimlParser {
     public static final String THAT_TAG = "that";
 
     public static List<Category> parse(File file, TagsRegistry tagsRegistry) throws AimlParserException {
+        try {
+            return parse(new FileInputStream(file), tagsRegistry);
+        } catch (FileNotFoundException e) {
+            throw new AimlParserException(e);
+        }
+    }
+
+    public static List<Category> parse(InputStream inputStream, TagsRegistry tagsRegistry) throws AimlParserException {
         InputSource is;
         try {
-            is = new InputSource(new InputStreamReader(new FileInputStream(file), UTF_8));
-        } catch (UnsupportedEncodingException | FileNotFoundException e) {
+            is = new InputSource(new InputStreamReader(inputStream, UTF_8));
+        } catch (UnsupportedEncodingException e) {
             throw new AimlParserException(e);
         }
         return parse(is, tagsRegistry);

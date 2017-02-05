@@ -11,7 +11,10 @@ import org.deman.bot.tags.TagsRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -27,10 +30,39 @@ public class Engine {
     private TagsRegistry tagsRegistry = new TagsRegistry();
     private int maxHistory = 50;
 
+    public void unloadAiml(){
+        decisionTree = new RootDecisionTreeNode();
+    }
+
+    public void loadAimlFilesFromPath(String path) throws AimlParserException {
+        Path baseDir = Paths.get(path);
+        try(Stream<Path> pathStream = Files.list(baseDir)){
+            pathStream.map(Path::toString).forEach((filename) -> {
+                try {
+                    logger.info("Loading : "+filename);
+                    loadAimlFile(filename);
+                } catch (AimlParserException e) {
+                    logger.error(e.getMessage(),e);
+                }
+            });
+        } catch (IOException e) {
+            throw new AimlParserException(e);
+        }
+    }
+
+
     public void loadAimlFile(String filename) throws AimlParserException {
+        try {
+            loadAimlStream(new FileInputStream(new File(filename)));
+        } catch (FileNotFoundException e) {
+            new AimlParserException(e);
+        }
+    }
+
+    public void loadAimlStream(InputStream stream) throws AimlParserException {
         TagsRegistry tagsRegistry = new TagsRegistry();
         // Load
-        List<Category> newCategories = AimlParser.parse(new File(filename), tagsRegistry);
+        List<Category> newCategories = AimlParser.parse(stream, tagsRegistry);
         // Check
         for (Category cat : newCategories) {
             TemplateCompiler.compile(cat, tagsRegistry); // Not mandatory... just to see warnings at statup
@@ -68,7 +100,7 @@ public class Engine {
         // And go evaluation!
         Optional<String> optResult = evaluate(context, sentence);
 
-        context.getState().getResponseStack().push(optResult.orElse(""), maxHistory);
+        context.getState().getResponseStack().push(optResult.orElse("*"), maxHistory);
         return optResult;
     }
 

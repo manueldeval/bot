@@ -1,5 +1,7 @@
 package org.deman.bot.engine;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
@@ -9,6 +11,7 @@ import java.util.Stack;
  */
 public class StarStack {
 
+    @JsonProperty
     private Stack<List<String>> stack = new Stack<>();
 
     public Optional<String> getStarAt(int index) {
